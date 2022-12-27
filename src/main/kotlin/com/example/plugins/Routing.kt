@@ -49,7 +49,11 @@ import org.koin.ktor.ext.inject
                 if(userId == "No-Email") {
                     call.respondText("No Username Provided")
                 }
-                call.respond(userService.fetchUserByEmail(userId))
+                val userInfo = userService.fetchUserByEmail(userId)
+                if(userInfo != "") {
+                    call.respond(userService.fetchUserByEmail(userId))
+                }
+                call.respondText("User Not found")
             }
 
             get("/listUserInfo") {

@@ -15,9 +15,13 @@ class UserRepository: IUserRepository {
         usersList.add(UserInfo("alex.macarthy2013@gmail.com", "password"))
 
     }
-    override fun fetchUser(email: String): UserInfo {
+    override fun fetchUser(email: String): Any {
         println("Fetching user with email id: $email")
-        return usersList.filter { it.email == email }[0] ?: UserInfo("Default", "Default")
+        return try {
+            usersList.first { it.email == email }
+        } catch(ex: NoSuchElementException) {
+            ""
+        }
     }
 
     override fun fetchAllUsers(): List<UserInfo> {
