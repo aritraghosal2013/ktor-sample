@@ -14,7 +14,12 @@ class UserService(private val userRepository: IUserRepository) {
     }
 
     fun addUser(email: String, password: String): Unit {
+        userRepository.addUser(email, password)
         return
+    }
+
+    fun deleteUser(email: String): Unit {
+        userRepository.deleteUser(email)
     }
 
 }

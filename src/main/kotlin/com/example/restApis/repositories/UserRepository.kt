@@ -33,5 +33,11 @@ class UserRepository: IUserRepository {
         usersList.add(UserInfo(email, password))
     }
 
+    override fun deleteUser(email: String) {
+        val index = usersList.map { userInfo -> userInfo.email  }.indexOf(email)
+        if(index != -1)
+            usersList.removeAt(index)
+    }
+
 
 }
