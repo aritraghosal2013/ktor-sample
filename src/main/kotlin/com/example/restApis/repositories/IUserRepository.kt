@@ -4,8 +4,8 @@ import com.example.restApis.models.UserInfo
 
 interface IUserRepository {
 
-    fun fetchUser(email: String): Any
-    fun fetchAllUsers(): List<UserInfo>
-    fun addUser(email: String, password: String): Unit
-    fun deleteUser(email: String): Unit
+    suspend fun fetchUser(email: String): Any?
+    suspend fun fetchAllUsers(): List<UserInfo>
+    suspend fun addUser(email: String, password: String): Unit
+    suspend fun deleteUser(email: String): Int
 }

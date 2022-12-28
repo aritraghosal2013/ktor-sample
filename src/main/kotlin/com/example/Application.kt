@@ -1,9 +1,11 @@
 package com.example
 
 import com.example.koin.confs.appModule
+import com.example.koin.confs.daoModules
 import com.example.koin.confs.modelModules
 import com.example.plugins.configureRouting
 import com.example.plugins.configureUserRouting
+import com.example.restApis.daos.DatabaseFactory
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -33,16 +35,22 @@ fun Application.module() {
         allowMethod(HttpMethod.Put)
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Patch)
-        allowHeader(HttpHeaders.Authorization)
         allowMethod(HttpMethod.Post)
+
+        allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.AccessControlAllowOrigin)
+        allowHeader(HttpHeaders.ContentType)
         allowHeader("MyCustomHeader")
         anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
     }
 
     // Needed For Koin DI
     startKoin {
-        modules(appModule, modelModules)
+        modules(appModule, modelModules, daoModules)
     }
+
+    // Initialize Database
+    DatabaseFactory.init()
 
     //Configure Routing
     configureRouting()

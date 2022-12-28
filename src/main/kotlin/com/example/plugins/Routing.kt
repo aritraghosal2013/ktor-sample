@@ -50,10 +50,7 @@ import org.koin.ktor.ext.inject
                     call.respondText("No Username Provided")
                 }
                 val userInfo = userService.fetchUserByEmail(userId)
-                if(userInfo != "") {
-                    call.respond(userService.fetchUserByEmail(userId))
-                }
-                call.respondText("User Not found")
+                call.respond(userService.fetchUserByEmail(userId)?:"User Not Found")
             }
 
             get("/listUserInfo") {
@@ -64,14 +61,18 @@ import org.koin.ktor.ext.inject
                 val payload = call.receive<UserInfo>()
                 println("Payload is $payload")
                 userService.addUser(payload.email, payload.password)
-                call.respondText("User created successfully")
+                call.respond(mapOf("status" to "true", "message" to "User created successfully"))
             }
 
             delete("/userInfo/{userId}") {
                 val userId: String = call.parameters["userId"]?: ""
                 if(userId != "") {
-                    userService.deleteUser(userId)
-                    call.respond(mapOf("status" to "true", "message" to "User Deleted Successfully"))
+                    if(userService.deleteUser(userId)>0){
+                        call.respond(mapOf("status" to "true", "message" to "User Deleted Successfully"))
+                    } else{
+                        call.respond(mapOf("status" to "false", "message" to "User Could not be deleted"))
+                    }
+
                 }
                 call.respond(mapOf("status" to "false", "message" to "User Not Found"))
             }

@@ -1,6 +1,8 @@
 package com.example.koin.confs
 
 
+import com.example.restApis.daos.UserInfoFacade
+import com.example.restApis.daos.UserInfoImpl
 import com.example.restApis.models.UserInfo
 import com.example.restApis.repositories.IUserRepository
 import com.example.restApis.repositories.UserRepository
@@ -10,7 +12,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single {
-        UserRepository() as IUserRepository
+        UserRepository(get()) as IUserRepository
     }
     single {
         UserService(get())
@@ -19,4 +21,10 @@ val appModule = module {
 
 val modelModules = module {
     factoryOf(::UserInfo)
+}
+
+val daoModules = module {
+    single {
+        UserInfoImpl() as UserInfoFacade
+    }
 }
